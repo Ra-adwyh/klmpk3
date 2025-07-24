@@ -1,0 +1,30 @@
+.graph-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+.node {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #3b82f6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    font-weight: bold;
+}
+.edge {
+    position: absolute;
+    height: 2px;
+    background: #64748b;
+    transform-origin: 0 0;
+}
+.edge-label {
+    position: absolute;
+    background: white;
+    padding: 0 3px;
+    font-size: 12px;
+    color: #334155;
+}
