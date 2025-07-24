@@ -1,0 +1,131 @@
+<!-- Nama: Rabiah al-adawiyah
+NIM: 240401010065
+Kelas: IF205
+Matkul: Struktur Data dan Algoritma
+ -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimasi Sistem Pemilihan rute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl font-bold text-blue-600">JASA PENGIRIMAN PAKET</h1>
+            <p class="text-gray-600 mt-2">Pemilihan Rute terdekat
+            </p>
+        </header>
+
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <!-- Menu Utama -->
+            <div id="main-menu">
+                <h2 class="text-2xl font-semibold mb-6 text-center text-gray-800">Menu Utama</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="showAdjMatrix()" class="btn-menu bg-blue-100 hover:bg-blue-200">
+                        <i class="fas fa-table mr-2"></i> Matriks Adjacency
+                    </button>
+                    <button onclick="showGraph()" class="btn-menu bg-green-100 hover:bg-green-200">
+                        <i class="fas fa-project-diagram mr-2"></i> Implementasi Graf
+                    </button>
+                    <button onclick="showDijkstra()" class="btn-menu bg-purple-100 hover:bg-purple-200">
+                        <i class="fas fa-route mr-2"></i> Cari Rute Terdekat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu 1: Tampilan Matriks Adjacency -->
+            <div id="adj-matrix" class="hidden mt-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Matriks Adjacency</h2>
+                    <button onclick="backToMain()" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-1"></i> Kembali
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse" id="adjacency-table">
+                    </table>
+                </div>
+            </div>
+
+            <!-- Menu 2: Implementasi Graf -->
+            <div id="graph-visual" class="hidden mt-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Implementasi Graf</h2>
+                    <button onclick="backToMain()" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-1"></i> Kembali
+                    </button>
+                </div>
+                <div class="graph-container" id="graph-canvas" style="height: 500px; position: relative;">
+                </div>
+                <div class="mt-6" id="adjacency-list">
+                </div>
+            </div>
+
+            <!-- Menu 3: Algoritma Dijkstra -->
+            <div id="dijkstra-menu" class="hidden mt-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Cari Rute Terdekat</h2>
+                    <button onclick="backToMain()" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-1"></i> Kembali
+                    </button>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Titik Asal</label>
+                            <select id="start-node" class="w-full px-3 py-2 border rounded-md">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                                <option value="I">I</option>
+                                <option value="J">J</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Titik Tujuan</label>
+                            <select id="end-node" class="w-full px-3 py-2 border rounded-md">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                                <option value="I">I</option>
+                                <option value="J">J</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="runDijkstra()" 
+                            class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                        Hitung Jalur Terpendek
+                    </button>
+                </div>
+                
+                <div id="dijkstra-result" class="hidden bg-white p-4 rounded-lg shadow-sm border">
+                    <h3 class="font-medium text-lg mb-2">Hasil Dijkstra:</h3>
+                    <div id="path-result" class="mb-3"></div>
+                    <div id="distance-result" class="font-bold"></div>
+                </div>
+                
+                <div class="graph-container mt-6" id="dijkstra-graph" style="height: 500px; position: relative;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
