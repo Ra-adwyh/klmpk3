@@ -13,7 +13,6 @@ const edges = [
     { from: 'H', to: 'I', weight: 12 },
     { from: 'I', to: 'J', weight: 5 }
 ];
-
 // Matriks adjacency
 const adjacencyMatrix = {};
 nodes.forEach(node => {
@@ -22,13 +21,13 @@ nodes.forEach(node => {
         adjacencyMatrix[node][n] = 0;
     });
 });
-
+// isi matriks adjacency berdasarkan edges yang ada
 edges.forEach(edge => {
     adjacencyMatrix[edge.from][edge.to] = edge.weight;
     adjacencyMatrix[edge.to][edge.from] = edge.weight;
 });
 
-// Fungsi untuk menampilkan/menyembunyikan menu
+// Fungsi untuk menampilkan menu utama atau menyembunyikan menu lainnya
 function showMainMenu() {
     document.getElementById('main-menu').classList.remove('hidden');
     document.getElementById('adj-matrix').classList.add('hidden');
@@ -59,12 +58,12 @@ function backToMain() {
     showMainMenu();
 }
 
-// Render matriks adjacency
+// fungsi untuk menampilkan matriks adjacency pada tabel
 function renderAdjacencyMatrix() {
     const table = document.getElementById('adjacency-table');
     table.innerHTML = '';
     
-    // Header row
+    // membuat baris header
     let headerRow = document.createElement('tr');
     let emptyHeader = document.createElement('th');
     emptyHeader.className = 'border p-2';
@@ -79,7 +78,7 @@ function renderAdjacencyMatrix() {
     
     table.appendChild(headerRow);
     
-    // Data rows
+    // membuat barus data
     nodes.forEach(from => {
         let row = document.createElement('tr');
         
@@ -99,12 +98,13 @@ function renderAdjacencyMatrix() {
     });
 }
 
-// Render visual graf
+// menampilkan graf dalam bentuk visual
+// menggunakan posisi node dalam lingkaran untuk memudahkan visualisasi
 function renderGraph(containerId = 'graph-canvas') {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     
-    // Positions for nodes (simplified circular layout)
+    //  posisi node dalam lingkaran
     const positions = {};
     const centerX = container.offsetWidth / 2;
     const centerY = container.offsetHeight / 2;
@@ -118,7 +118,7 @@ function renderGraph(containerId = 'graph-canvas') {
         };
     });
     
-    // Draw edges
+    // menampilkan edges
     edges.forEach(edge => {
         const fromPos = positions[edge.from];
         const toPos = positions[edge.to];
@@ -126,7 +126,7 @@ function renderGraph(containerId = 'graph-canvas') {
         const edgeEl = document.createElement('div');
         edgeEl.className = 'edge';
         
-        // Calculate edge length and angle
+        // menghitung panjang dan sudut dari edge
         const length = Math.sqrt(
             Math.pow(toPos.x - fromPos.x, 2) + 
             Math.pow(toPos.y - fromPos.y, 2)
@@ -142,7 +142,7 @@ function renderGraph(containerId = 'graph-canvas') {
         edgeEl.style.top = `${fromPos.y}px`;
         edgeEl.style.transform = `rotate(${angle}deg)`;
         
-        // Add weight label
+        // menambahkan label pada edge
         const labelEl = document.createElement('div');
         labelEl.className = 'edge-label';
         labelEl.textContent = edge.weight;
@@ -153,7 +153,7 @@ function renderGraph(containerId = 'graph-canvas') {
         container.appendChild(labelEl);
     });
     
-    // Draw nodes
+    // menampilkan nodes
     nodes.forEach(node => {
         const pos = positions[node];
         const nodeEl = document.createElement('div');
@@ -165,7 +165,7 @@ function renderGraph(containerId = 'graph-canvas') {
     });
 }
 
-// Render adjacency list
+// fungsi untuk menampilkan daftar adjacency
 function renderAdjacencyList() {
     const listContainer = document.getElementById('adjacency-list');
     listContainer.innerHTML = '';
@@ -191,14 +191,14 @@ function renderAdjacencyList() {
     listContainer.innerHTML = html;
 }
 
-// Dijkstra's algorithm implementation
+// implementasi algoritma Dijkstra
 function dijkstra(startNode, endNode) {
     const distances = {};
     const previousNodes = {};
     const visited = new Set();
     const queue = new PriorityQueue();
     
-    // Initialize distances
+    // Inisialisasi jarak dan previous nodes
     nodes.forEach(node => {
         distances[node] = node === startNode ? 0 : Infinity;
         previousNodes[node] = null;
@@ -219,7 +219,6 @@ function dijkstra(startNode, endNode) {
         
         visited.add(currentNode);
         
-        // Update distances for neighbors
         nodes.forEach(neighbor => {
             if (adjacencyMatrix[currentNode][neighbor] > 0) {
                 const newDistance = distances[currentNode] + adjacencyMatrix[currentNode][neighbor];
@@ -236,7 +235,7 @@ function dijkstra(startNode, endNode) {
     return { distances, previousNodes };
 }
 
-// Helper class for priority queue used in Dijkstra
+//membuat kelas PriorityQueue untuk mengelola antrian prioritas
 class PriorityQueue {
     constructor() {
         this.items = [];
@@ -268,7 +267,7 @@ class PriorityQueue {
     }
 }
 
-// Function to reconstruct path from Dijkstra results
+// Fungsi untuk mendapatkan jalur dari titik awal ke titik akhir
 function getPath(previousNodes, startNode, endNode) {
     const path = [];
     let currentNode = endNode;
@@ -281,13 +280,12 @@ function getPath(previousNodes, startNode, endNode) {
     return path.length > 0 && path[0] === startNode ? path : [];
 }
 
-// Function to highlight path in the graph
+// Fungsi untuk menyorot jalur pada graf
 function highlightPath(path, containerId = 'dijkstra-graph') {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     renderGraph(containerId);
     
-    // Highlight nodes in path
     const positions = {};
     const centerX = container.offsetWidth / 2;
     const centerY = container.offsetHeight / 2;
@@ -301,16 +299,16 @@ function highlightPath(path, containerId = 'dijkstra-graph') {
         };
     });
     
-    // Highlight edges in path
+    // Highlight edges yang ada di jalur
     for (let i = 0; i < path.length - 1; i++) {
         const from = path[i];
-        const to = path[i+1];
+        const to = path[i + 1];
         
         const fromPos = positions[from];
         const toPos = positions[to];
         
         const edgeEl = document.querySelectorAll('#dijkstra-graph .edge');
-        const edgeLabels = document.querySelectorAll('#dijkstra-grapph .edge-label');
+        const edgeLabels = document.querySelectorAll('#dijkstra-graph .edge-label');
         
         edgeEl.forEach(el => {
             const style = window.getComputedStyle(el);
@@ -335,7 +333,7 @@ function highlightPath(path, containerId = 'dijkstra-graph') {
         });
     }
     
-    // Highlight nodes in path
+    // Highlight node - node yang ada di jalur
     path.forEach(node => {
         const pos = positions[node];
         const nodes = document.querySelectorAll(`#dijkstra-graph .node`);
@@ -350,7 +348,7 @@ function highlightPath(path, containerId = 'dijkstra-graph') {
     });
 }
 
-// Run Dijkstra algorithm and display results
+// fungsi untuk menjalankan algoritma Dijkstra dan menampilkan hasilnya
 function runDijkstra() {
     const startNode = document.getElementById('start-node').value;
     const endNode = document.getElementById('end-node').value;
@@ -363,7 +361,7 @@ function runDijkstra() {
     const { distances, previousNodes } = dijkstra(startNode, endNode);
     const path = getPath(previousNodes, startNode, endNode);
     
-    // Display results
+    // menampilkan hasil jalur 
     const resultContainer = document.getElementById('dijkstra-result');
     resultContainer.classList.remove('hidden');
     
@@ -375,19 +373,19 @@ function runDijkstra() {
         distanceResult.innerHTML = '';
     } else {
         pathResult.innerHTML = `<span class="font-medium">Jalur:</span> ${path.join(' → ')}`;
-        distanceResult.innerHTML = `<span class="font-medium">Total jarak:</span> ${distances[endNode]}`;
+        distanceResult.innerHTML = `<span class="font-medium">Total jarak:</span> ${distances[endNode]} KM`;
         
-        // Highlight path in graph
+        // Highlight jalur pada graf
         highlightPath(path);
     }
 }
 
-// Clear Dijkstra result
+// membersihkan hasil perhitungan Dijkstra dari tampilan
 function clearDijkstraResult() {
     document.getElementById('dijkstra-result').classList.add('hidden');
     document.getElementById('path-result').innerHTML = '';
     document.getElementById('distance-result').innerHTML = '';
 }
 
-// Initialize
+// Insialisasi tampilan ke menu utama saat aplikasi dijalankan
 showMainMenu();
